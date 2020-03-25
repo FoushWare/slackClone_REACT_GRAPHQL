@@ -4,9 +4,11 @@ FROM node:latest
 COPY .  .
 
 # once i installed nodejs i can run npm to insall all package dependances 
+## Skip this and install the dependances from the global installed in my machine 
 RUN npm install
 
 # command to run my application
+
 CMD [ "npm", "start" ]
 
 
