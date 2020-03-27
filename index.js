@@ -36,8 +36,9 @@ app.use('/graphiql', graphiqlExpress({ endpointURL : graphqlEndpoint }));
 
 //Migrate the models in the DB 
 // force => drop all the database 
- models.sequelize.sync({ force: true }).then(() => {
-  console.log("Success!");
+//  models.sequelize.sync({ force: true }).then(() => {
+ models.sequelize.sync().then(() => {
+  console.log("Success!!!!!!");
   app.listen(8081);
 }).catch((err)=>{
   console.log(err);
