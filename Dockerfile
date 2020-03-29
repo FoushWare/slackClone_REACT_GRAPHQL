@@ -1,11 +1,13 @@
 # what is say here is please install this package inside my little computer [this docker image]
-FROM node:10
+FROM node:12
 WORKDIR /usr/src/app
 
 COPY package.json /usr/src/app/package.json
 
 RUN npm install
 RUN npm install -g nodemon
+
+
 
 CMD ["nodemon","--exec","babel-node","index"]
 # $ docker build -t foushware/slack_clone .    => this to build the image 
