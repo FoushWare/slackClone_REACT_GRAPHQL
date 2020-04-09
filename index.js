@@ -7,6 +7,10 @@ import { makeExecutableSchema } from 'graphql-tools';
 import { fileLoader, mergeTypes, mergeResolvers } from 'merge-graphql-schemas';
 import path from 'path';
 import cors from 'cors';
+const SECRET = 'aljdflkajelkrjlqkerjlkqerjlkejr3l4k';
+const SECRET2 = 'lakdflakjarjlkerjloiq3u48aljdflkajelkrjlqkerjlkqerjlkejr3l4k';
+
+
 
 import models from './models';
 
@@ -29,7 +33,9 @@ context:{
   models,
   user:{
     id:1,
-  }
+  },
+  SECRET,
+  SECRET2
 }, }));
 //we tell graphiql what graphql is :)
 app.use('/graphiql', graphiqlExpress({ endpointURL : graphqlEndpoint }));
