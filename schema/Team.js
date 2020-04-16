@@ -1,6 +1,8 @@
 export default `
 
-    type Team{
+    type Team {
+        id:Int!
+        name: String!
         owner: User!
         members:[User!]!
         channels:[Channel!]!
@@ -9,6 +11,7 @@ export default `
 
     type CreateTeamResponse {
         ok: Boolean!
+        team: Team!
         errors: [Error!]
     }
 
@@ -16,6 +19,10 @@ export default `
 
     type Mutation {
         createTeam(name:String!): CreateTeamResponse!
+    }
+
+    type Query {
+        allTeams: [Team!]!
     }
 
 
