@@ -40,6 +40,8 @@ const models = {
     Message:sequelize.import('./Message'),
     Team:sequelize.import('./Team'),
     Channel:sequelize.import('./Channel'),
+    Member: sequelize.import('./member'),
+
 };
 Object.keys(models).forEach((modelName) =>{
     if('associate' in models[modelName]){
