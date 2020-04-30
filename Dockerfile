@@ -1,5 +1,5 @@
 # what is say here is please install this package inside my little computer [this docker image]
-FROM node:12
+FROM node:10
 WORKDIR /usr/src/app
 
 COPY package.json /usr/src/app/package.json

@@ -12,7 +12,9 @@ export default `
     errors: [Error!]
   }
   type Query {
-    allTeams: [Team!]!
+    ownedTeams: [Team!]!
+    myinvitedTeams: [Team!]!
+
   }
   type VoidResponse {
     ok: Boolean!

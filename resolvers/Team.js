@@ -3,8 +3,22 @@ import requiresAuth from '../permissions';
 
 export default {
   Query: {
-    allTeams: requiresAuth.createResolver(async (parent, args, { models, user }) =>
+    ownedTeams: requiresAuth.createResolver(async (parent, args, { models, user }) =>
       models.Team.findAll({ where: { owner: user.id } }, { raw: true })),
+
+      myinvitedTeams: requiresAuth.createResolver(async (parent,args,{models,user}) => 
+      
+        models.Team.findAll({
+          include: [
+            {
+              model: models.User,
+              where: { id: user.id}
+            }
+          ]
+        },{raw:true})
+      
+      
+      ),
   },
   Mutation: {
     addTeamMember: requiresAuth.createResolver(async (parent, { email, teamId }, { models, user }) => {
