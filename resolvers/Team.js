@@ -6,19 +6,24 @@ export default {
     ownedTeams: requiresAuth.createResolver(async (parent, args, { models, user }) =>
       models.Team.findAll({ where: { owner: user.id } }, { raw: true })),
 
-      myinvitedTeams: requiresAuth.createResolver(async (parent,args,{models,user}) => 
       
-        models.Team.findAll({
-          include: [
-            {
-              model: models.User,
-              where: { id: user.id}
-            }
-          ]
-        },{raw:true})
+      myinvitedTeams: requiresAuth.createResolver(async (parent, args, { models, user }) =>
+      models.sequelize.query('select * from teams join members on id = team_id where user_id = ?', {
+        replacements: [user.id],
+        model: models.Team,
+      })),
+      
+        // models.Team.findAll({
+        //   include: [
+        //     {
+        //       model: models.User,
+        //       where: { id: user.id}
+        //     }
+        //   ]
+        // },{raw:true})
       
       
-      ),
+      // ),
   },
   Mutation: {
     addTeamMember: requiresAuth.createResolver(async (parent, { email, teamId }, { models, user }) => {
