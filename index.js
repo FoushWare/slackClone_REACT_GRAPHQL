@@ -11,6 +11,11 @@ const SECRET = 'aljdflkajelkrjlqkerjlkqerjlkejr3l4k';
 const SECRET2 = 'lakdflakjarjlkerjloiq3u48aljdflkajelkrjlqkerjlkqerjlkejr3l4k';
 import jwt from 'jsonwebtoken';
 import { refreshTokens } from './auth';
+import { createServer } from "http";
+import { execute, subscribe } from "graphql";
+import { PubSub } from "graphql-subscriptions";
+import { SubscriptionServer } from 'subscriptions-transport-ws';
+
 
 
 
@@ -64,12 +69,23 @@ context:{
 //we tell graphiql what graphql is :)
 app.use('/graphiql', graphiqlExpress({ endpointURL : graphqlEndpoint }));
 
+const server = createServer(app);
+
 //Migrate the models in the DB 
 // force => drop all the database 
 //  models.sequelize.sync({ force: true }).then(() => {
  models.sequelize.sync().then(() => {
   console.log("Success!!!!!!");
-  app.listen(8081);
+  server.listen(8081,()=>{
+    new SubscriptionServer({
+      execute,
+      subscribe,
+      schema,
+    },{
+      server,
+      path: '/subscriptions'
+    })
+  });
 }).catch((err)=>{
   console.log(err);
 });
