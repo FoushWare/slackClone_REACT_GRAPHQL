@@ -67,25 +67,57 @@ context:{
   SECRET2
 }, })));
 //we tell graphiql what graphql is :)
-app.use('/graphiql', graphiqlExpress({ endpointURL : graphqlEndpoint }));
+// app.use('/graphiql', graphiqlExpress({ endpointURL : graphqlEndpoint }));
+app.use(
+  '/graphiql',
+  graphiqlExpress({
+    endpointURL: graphqlEndpoint,
+    subscriptionsEndpoint: 'ws://localhost:8081/subscriptions',
+  }),
+);
 
 const server = createServer(app);
 
-//Migrate the models in the DB 
-// force => drop all the database 
-//  models.sequelize.sync({ force: true }).then(() => {
- models.sequelize.sync().then(() => {
-  console.log("Success!!!!!!");
-  server.listen(8081,()=>{
-    new SubscriptionServer({
-      execute,
-      subscribe,
-      schema,
-    },{
-      server,
-      path: '/subscriptions'
-    })
+models.sequelize.sync({}).then(() => {
+  server.listen(8081, () => {
+    // eslint-disable-next-line no-new
+    new SubscriptionServer(
+      {
+        execute,
+        subscribe,
+        schema,
+        OnConnect: async ({ token, refreshToken }, webSocket) => {
+          if (token && refreshToken) {
+            
+            let user = null;
+            try {
+              const payload = jwt.verify(token, SECRET);
+              user = payload.user;
+              console.log(user);
+            } catch (err) {
+              const newTokens = await refreshTokens(token, refreshToken, models, SECRET, SECRET2);
+              user = newTokens.user;
+            }
+            if (!user) {
+              throw new Error('Invalid auth tokens');
+            }
+
+            const member = await models.Member.findOne({ where: { teamId: 1, userId: user.id } });
+
+            if (!member) {
+              throw new Error('Missing auth tokens!');
+            }
+
+            return true;
+          }
+
+          throw new Error('Missing auth tokens!');
+        },
+      },
+      {
+        server,
+        path: '/subscriptions',
+      },
+    );
   });
-}).catch((err)=>{
-  console.log(err);
 });
