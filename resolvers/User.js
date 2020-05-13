@@ -13,6 +13,7 @@ export default {
         {
           replacements: [user.id],
           model: models.Team,
+          raw:true
         },
       ),
   },
