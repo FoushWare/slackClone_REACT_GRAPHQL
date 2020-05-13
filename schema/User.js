@@ -4,14 +4,14 @@ export default `
         id:Int!
         username:String!
         email: String!
-        team:[Team!]!
+        teams:[Team!]!
 
     }
 
 
     type Query {
-        getUser(id:Int!):User!
         allUsers:[User!]!
+        me: User!
 
     }
     type RegisterResponse {
