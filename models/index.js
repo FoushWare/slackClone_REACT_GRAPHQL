@@ -41,6 +41,7 @@ const models = {
     Team:sequelize.import('./Team'),
     Channel:sequelize.import('./Channel'),
     Member: sequelize.import('./member'),
+    DirectMessage: sequelize.import('./directMessage'),
 
 };
 Object.keys(models).forEach((modelName) =>{
