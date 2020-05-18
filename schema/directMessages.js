@@ -6,12 +6,12 @@ type DirectMessage {
     text:String!
     sender: User!
     receiverId: Int!
-    created_at: String!
+    createdAt: String!
 }
 
 
 type Query {
-    directMessages(teamId: Int!, otherUserId: Int!): [DirectMessage !]!
+     directMessages(teamId: Int!, otherUserId: Int!): [DirectMessage !]!
 }
 
 type Mutation {

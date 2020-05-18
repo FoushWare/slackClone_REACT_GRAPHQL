@@ -1,44 +1,41 @@
 import requiresAuth from '../permissions';
 
+const { Op } = require("sequelize");
 export default {
-    sender: ({ sender, senderId }, args, { models }) => {
-        if (sender) {
-          return sender;
-        }
-  
-        return models.User.findOne({ where: { id: senderId } }, { raw: true });
-      },
 
-    Query:{
-        directMessages: requiresAuth.createResolver(async(parent,{teamId,otherUserId},{models,user}) =>
-        
-        models.DirectMessage.findAll(
-            {
-                order:[['created_at','ASC']],
-                where:{
-                    teamId,
-                    [models.sequelize.Op.or]:[
-                        {
-                            [models.sequelize.Op.and]:[{receiverId:otherUserId.id},{senderId:user.id}]
-                        },{
 
-                            [models.sequelize.Op.and]:[{receiverId:user.id},{senderId:otherUserId.id}]
-                        }
-                    ]
-                }
-
-            },
-            {raw:true}
-        ), 
-        
-        
-        
-        
-        
-        
-        
-        ),
+    DirectMessage:{
+        sender: ({ sender, senderId }, args, { models }) => {
+            if (sender) {
+              return sender;
+            }
+      
+            return models.User.findOne({ where: { id: senderId } }, { raw: true });
+          },
     },
+  
+
+    Query: {
+        directMessages: requiresAuth.createResolver( async (parent, { teamId, otherUserId }, { models, user }) =>
+
+            models.DirectMessage.findAll(
+                {
+                 order:[['createdAt','ASC']],
+                  where: {
+                    teamId,
+                    [Op.or]: [
+                      {
+                        [Op.and]: [{ receiverId: otherUserId }, { senderId: user.id }],
+                      },
+                      {
+                        [Op.and]: [{ receiverId: user.id }, { senderId: otherUserId }],
+                      },
+                    ],
+                  },
+                },
+                { raw: true },
+              )),
+      },//query curlly praces :)
 
     Mutation:{
 
@@ -50,6 +47,7 @@ export default {
                     ...args,
                     senderId: user.id
                 });
+                console.log(directMessage);
                 return true;
             } catch (error) {
                console.log(error);
