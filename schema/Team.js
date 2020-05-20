@@ -2,7 +2,7 @@ export default `
   type Team {
     id: Int!
     name: String!
-    members: [User!]!
+    directMessageMembers: [User!]!
     channels: [Channel!]!
     admin: Boolean!
   }
@@ -12,8 +12,6 @@ export default `
     errors: [Error!]
   }
   type Query {
-    ownedTeams: [Team!]!
-    myinvitedTeams: [Team!]!
     getTeamMembers(teamId: Int!):[User!]!
 
 
