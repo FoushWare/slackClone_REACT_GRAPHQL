@@ -14,6 +14,7 @@ export default `
   type Query {
     ownedTeams: [Team!]!
     myinvitedTeams: [Team!]!
+    getTeamMembers(teamId: Int!):[User!]!
 
 
   }
