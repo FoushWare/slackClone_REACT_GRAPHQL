@@ -7,7 +7,7 @@
  * docker-compose up --build
  * docker exec -it <name of the container with run the db> psql -U postgres
     -for Me it Was :
-    -$ docker exec -it slack-clone_db_1  psql -U postgres
+    -$ docker exec -it react_db_1  psql -U postgres
 
  ********** To connect to the db **************************** 
     $  \c <database_name>

@@ -22,7 +22,8 @@
 import Sequelize from 'sequelize';
 
 //connect to postgresSQL DATABASE 
-const sequelize = new Sequelize('slack-clone','postgres','postgres',{
+// test database name : testslack  original one name : slack-clone
+const sequelize = new Sequelize(process.env.TEST_DB ||'testslack','postgres','postgres',{
     host:"db",
     pool:{
         max:9,

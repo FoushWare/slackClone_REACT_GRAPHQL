@@ -71,14 +71,14 @@ app.use(
   '/graphiql',
   graphiqlExpress({
     endpointURL: graphqlEndpoint,
-    subscriptionsEndpoint: 'ws://localhost:8081/subscriptions',
+    subscriptionsEndpoint: `ws://localhost:${process.env.TEST_PORT || 8081}/subscriptions`,
   }),
 );
 
 const server = createServer(app);
 
 models.sequelize.sync({}).then(() => {
-  server.listen(8081, () => {
+  server.listen(process.env.TEST_PORT||8081, () => {
     // eslint-disable-next-line no-new
     new SubscriptionServer(
       {
