@@ -1,6 +1,6 @@
 import express from 'express';
 import bodyParser from 'body-parser';
-import { graphqlExpress,graphiqlExpress } from 'apollo-server-express';
+import { graphqlExpress, graphiqlExpress } from 'apollo-server-express';
 import { makeExecutableSchema } from 'graphql-tools';
 // import typeDefs from './schema';
 // import  resolvers from './resolvers';
@@ -14,6 +14,8 @@ import { refreshTokens } from './auth';
 import { createServer } from "http";
 import { execute, subscribe } from "graphql";
 import { SubscriptionServer } from 'subscriptions-transport-ws';
+import formidable from 'formidable';
+
 
 
 
@@ -24,9 +26,9 @@ const typeDefs = mergeTypes(fileLoader(path.join(__dirname, './schema')));
 
 const resolvers = mergeResolvers(fileLoader(path.join(__dirname, './resolvers')));
 
- const schema = makeExecutableSchema({
-    typeDefs,
-    resolvers
+const schema = makeExecutableSchema({
+  typeDefs,
+  resolvers
 });
 const addUser = async (req, res, next) => {
   const token = req.headers['x-token'];
@@ -48,23 +50,61 @@ const addUser = async (req, res, next) => {
   next();
 };
 
+const uploadDir = 'files';
 
- const graphqlEndpoint = '/graphql';
+const fileMiddleware = (req, res, next) => {
+  if (!req.is('multipart/form-data')) {
+    return next();
+  }
+
+  const form = formidable.IncomingForm({
+    uploadDir,
+  });
+
+  form.parse(req, (error, { operations }, files) => {
+    if (error) {
+      console.log(error);
+    }
+
+    const document = JSON.parse(operations);
+
+    if (Object.keys(files).length) {
+      const { file: { type, path: filePath } } = files;
+      console.log(type);
+      console.log(filePath);
+      document.variables.file = {
+        type,
+        path: filePath,
+      };
+    }
+
+    req.body = document;
+    next();
+  });
+};
+
+
+const graphqlEndpoint = '/graphql';
 
 const app = express();
 app.use(cors('*'));
 app.use(addUser);
 
 // bodyParser is needed just for POST.
-app.use(graphqlEndpoint, bodyParser.json(), graphqlExpress(req => ({
-schema,
-context:{
-  models,
-  user: req.user
-  ,
-  SECRET,
-  SECRET2
-}, })));
+app.use(
+  graphqlEndpoint,
+  bodyParser.json(),
+  fileMiddleware,
+  graphqlExpress(req => ({
+    schema,
+    context: {
+      models,
+      user: req.user
+      ,
+      SECRET,
+      SECRET2
+    },
+  })));
 //we tell graphiql what graphql is :)
 // app.use('/graphiql', graphiqlExpress({ endpointURL : graphqlEndpoint }));
 app.use(
@@ -76,9 +116,9 @@ app.use(
 );
 
 const server = createServer(app);
-
+//force:true
 models.sequelize.sync({}).then(() => {
-  server.listen(process.env.TEST_PORT||8081, () => {
+  server.listen(process.env.TEST_PORT || 8081, () => {
     // eslint-disable-next-line no-new
     new SubscriptionServer(
       {
