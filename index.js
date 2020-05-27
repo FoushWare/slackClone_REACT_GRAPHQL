@@ -114,7 +114,8 @@ app.use(
     subscriptionsEndpoint: `ws://localhost:${process.env.TEST_PORT || 8081}/subscriptions`,
   }),
 );
-
+//serve static files 
+app.use('/files',express.static('files'));
 const server = createServer(app);
 //force:true
 models.sequelize.sync({}).then(() => {

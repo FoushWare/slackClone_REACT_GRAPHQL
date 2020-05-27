@@ -25,7 +25,8 @@ export default {
       }
 
       return models.User.findOne({ where: { id: userId } }, { raw: true });
-    }
+    },
+    url:parent => (parent.url? `http://localhost:8081/${parent.url}` : parent.url),
   },
   Mutation: {
     createMessage: requiresAuth.createResolver(async (parent, { file, ...args }, { models, user }) => {
