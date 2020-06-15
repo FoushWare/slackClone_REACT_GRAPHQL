@@ -32,6 +32,7 @@ export default {
               if (!args.public) {
                 const members = args.members.filter((m) => m !== user.id);
                 members.push(user.id);
+                console.log("The Member foush: is : "+ members);
                 const pcmembers = members.map((m) => ({
                   userId: m,
                   channelId: channel.dataValues.id,
