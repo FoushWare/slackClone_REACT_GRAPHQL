@@ -15,6 +15,8 @@ import { createServer } from "http";
 import { execute, subscribe } from "graphql";
 import { SubscriptionServer } from 'subscriptions-transport-ws';
 import formidable from 'formidable';
+import DataLoader from "dataloader";
+import {channelBatcher} from "./batchFunctions" ;
 
 
 
@@ -102,7 +104,8 @@ app.use(
       user: req.user
       ,
       SECRET,
-      SECRET2
+      SECRET2,
+      channelLoader: new DataLoader(ids=> channelBatcher(ids,models,req.user)),
     },
   })));
 //we tell graphiql what graphql is :)
