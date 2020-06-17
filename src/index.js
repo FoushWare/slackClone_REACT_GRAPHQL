@@ -106,6 +106,8 @@ app.use(
       SECRET,
       SECRET2,
       channelLoader: new DataLoader(ids=> channelBatcher(ids,models,req.user)),
+      serverUrl: `${req.protocol}://${req.get('host')}`,
+
     },
   })));
 //we tell graphiql what graphql is :)

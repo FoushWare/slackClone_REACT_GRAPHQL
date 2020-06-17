@@ -9,7 +9,7 @@ RUN npm install -g nodemon
 
 
 
-CMD ["nodemon","--exec","babel-node","index"]
+CMD ["nodemon","--exec","babel-node","src/index"]
 # $ docker build -t foushware/slack_clone .    => this to build the image 
 # docker run -p 3001:8081 foushware/slack_clone => to run the image inside the container  p=> specify port  port1:port2
 # port1 => what i want to run in my computer    |  port2 => what i want to run in the container

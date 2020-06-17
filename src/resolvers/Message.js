@@ -15,7 +15,8 @@ export default {
     },
   },
   Message: {
-    url: parent => (parent.url ? `http://localhost:8081/${parent.url}` : parent.url),
+    url: (parent, args, { serverUrl }) => (parent.url ? `${serverUrl}/${parent.url}` : parent.url),
+
     user: ({ user, userId }, args, { models }) => {
       if (user) {
         return user;
