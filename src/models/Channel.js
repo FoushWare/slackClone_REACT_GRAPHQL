@@ -20,7 +20,7 @@ export default (sequelize, DataTypes) => {
         through:models.PCMember,
         foreignKey:{
           name:"channelId",
-          field:'Channel_id',
+          field:'channel_id',
         }
       })
 
