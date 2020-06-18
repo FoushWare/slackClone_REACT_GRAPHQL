@@ -16,6 +16,7 @@
     "babel-cli": "^6.26.0",
     "babel-preset-env": "^1.7.0",
     "babel-preset-stage-3": "^6.24.1",
+    "babel-plugin-transform-object-rest-spread": "^6.26.0",
     "eslint": "^7.0.0",
     "eslint-config-airbnb": "^18.1.0",
     "eslint-config-airbnb-base": "^14.1.0",
@@ -47,7 +48,6 @@
     "pg-hstore": "^2.3.3",
     "sequelize": "^5.21.8",
     "subscriptions-transport-ws": "^0.9.1",
-    "graphql-subscriptions": "^0.5.4",
-    "babel-runtime": "^6.26.0"
+    "graphql-subscriptions": "^0.5.4"
   }
 }
