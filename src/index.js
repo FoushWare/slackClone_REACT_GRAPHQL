@@ -16,7 +16,7 @@ import { execute, subscribe } from "graphql";
 import { SubscriptionServer } from 'subscriptions-transport-ws';
 import formidable from 'formidable';
 import DataLoader from "dataloader";
-import {channelBatcher} from "./batchFunctions" ;
+import {channelBatcher,userBatcher} from "./batchFunctions" ;
 
 
 
@@ -107,6 +107,8 @@ app.use(
       SECRET2,
       channelLoader: new DataLoader(ids=> channelBatcher(ids,models,req.user)),
       serverUrl: `${req.protocol}://${req.get('host')}`,
+      userLoader: new DataLoader(ids => userBatcher(ids, models)),
+
 
     },
   })));

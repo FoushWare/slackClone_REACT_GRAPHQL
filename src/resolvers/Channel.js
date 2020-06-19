@@ -1,5 +1,6 @@
 import formatErrors from "../formatErrors";
 import requiresAuth from "../permissions";
+const { Op } = require("sequelize");
 
 export default {
   Mutation: {
@@ -39,7 +40,7 @@ export default {
         raw: true,
         where: {
           id: {
-            [models.sequelize.Op.in]: members,
+            [Op.in]: members,
           },
         },
       });
